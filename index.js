@@ -58,7 +58,7 @@ const generateHTMLCode = ({
       </div>
           
       <div class="card-footer">
-          <button class="btn btn-outline-primary" name="${id}">Open Task</button>
+          <button class="btn btn-outline-primary" name="${id}" data-bs-toggle="modal" data-bs-target="#openTask" onclick="openTask.apply(this, arguments)">Open Task </button>
       </div>
   
   </div>
@@ -267,7 +267,7 @@ const searchTask = (event) => {
       taskContainer.removeChild(taskContainer.firstChild);
     }
   
-    const resultData = globalTaskData.filter(({ title }) => title.includes(e.target.value));
+    const resultData = globalTaskData.filter(({ title }) => title.includes(event.target.value));
   
     resultData.map((newCardData) => {
 
@@ -278,4 +278,29 @@ const searchTask = (event) => {
         injectToDOM(newCard);
     });
 
+  };
+
+  const openTask = (event) => {
+
+    parentElement = event.target.parentNode.parentNode;
+    console.log(parentElement);
+
+    const modalData = {
+        taskImage: parentElement.childNodes[1],
+        taskTitle: parentElement.childNodes[2],
+        taskDescription: parentElement.childNodes[3],
+    };
+
+    openTaskModal(modalData);
+
+  };
+
+  const openTaskModal = ({ id, title, description, url }) => {
+    const date = new Date(parseInt(id));
+    return ` <div id=${id}>
+    <img src=${url} alt="bg image" class="img-fluid mb-3" />
+    <strong class="text-sm text-muted">Created on ${date.toDateString()}</strong>
+    <h2 class="my-3">${title}</h2>
+    <p>${description}</p>
+    </div>`;
   };
